@@ -1,0 +1,158 @@
+/*
+ * SomPayKit theme: the single source of truth for colors, radius and fonts.
+ * Light values are the approved mockup colors (docs/mockups/README.md).
+ * Dark values are not in the mockups yet: proposed, review before v1.0.
+ *
+ * Tailwind v4 + shadcn/ui. Import once in your global CSS, after `@import "tailwindcss"`.
+ * `registry/registry.json` (item `sompaykit-theme`) carries the same values; a test keeps them in sync.
+ *
+ * Rules: purple = action. Green (`success`) = paid, nothing else. `accent` is shadcn's neutral
+ * hover background, not a brand color. Status colors always come with an icon and text.
+ */
+
+:root {
+  --radius: 0.75rem;
+
+  --background: #f6f5fa;
+  --foreground: #18181b;
+  --card: #ffffff;
+  --card-foreground: #18181b;
+  --popover: #ffffff;
+  --popover-foreground: #18181b;
+
+  --primary: #5b2fd1;
+  --primary-foreground: #ffffff;
+  --primary-hover: #4421a8;
+  --primary-muted: #ede7fc;
+  --primary-muted-foreground: #3b1e8f;
+
+  --secondary: #f4f4f5;
+  --secondary-foreground: #18181b;
+  --muted: #f4f4f5;
+  --muted-foreground: #52525b;
+  --accent: #f4f4f5;
+  --accent-foreground: #18181b;
+
+  --success: #157a52;
+  --success-foreground: #ffffff;
+  --success-muted: #dcf5e9;
+  --success-muted-foreground: #0f5132;
+
+  --warning: #b45309;
+  --warning-foreground: #ffffff;
+  --warning-muted: #fef3c7;
+  --warning-muted-foreground: #78350f;
+
+  --destructive: #b91c1c;
+  --destructive-foreground: #ffffff;
+  --destructive-muted: #fee2e2;
+  --destructive-muted-foreground: #7f1d1d;
+
+  --info: #1d4ed8;
+  --info-foreground: #ffffff;
+  --info-muted: #dbeafe;
+  --info-muted-foreground: #1e3a8a;
+
+  --border: #e4e4e7;
+  --input: #d4d4d8;
+  --ring: #5b2fd1;
+}
+
+.dark {
+  --background: #0c0a12;
+  --foreground: #fafafa;
+  --card: #17151f;
+  --card-foreground: #fafafa;
+  --popover: #17151f;
+  --popover-foreground: #fafafa;
+
+  --primary: #a78bfa;
+  --primary-foreground: #18181b;
+  --primary-hover: #c4b5fd;
+  --primary-muted: #2e1f5e;
+  --primary-muted-foreground: #ddd6fe;
+
+  --secondary: #232030;
+  --secondary-foreground: #fafafa;
+  --muted: #232030;
+  --muted-foreground: #a1a1aa;
+  --accent: #232030;
+  --accent-foreground: #fafafa;
+
+  --success: #34d399;
+  --success-foreground: #052e1c;
+  --success-muted: #0b3b2a;
+  --success-muted-foreground: #a7f3d0;
+
+  --warning: #fbbf24;
+  --warning-foreground: #18181b;
+  --warning-muted: #3d2a06;
+  --warning-muted-foreground: #fde68a;
+
+  --destructive: #f87171;
+  --destructive-foreground: #18181b;
+  --destructive-muted: #450a0a;
+  --destructive-muted-foreground: #fecaca;
+
+  --info: #60a5fa;
+  --info-foreground: #18181b;
+  --info-muted: #172554;
+  --info-muted-foreground: #bfdbfe;
+
+  --border: #2e2a3b;
+  --input: #4a4560;
+  --ring: #a78bfa;
+}
+
+@theme inline {
+  --font-sans: 'Geist', 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-arabic: 'IBM Plex Sans Arabic', 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-muted: var(--primary-muted);
+  --color-primary-muted-foreground: var(--primary-muted-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-success-muted: var(--success-muted);
+  --color-success-muted-foreground: var(--success-muted-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-warning-muted: var(--warning-muted);
+  --color-warning-muted-foreground: var(--warning-muted-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-destructive-muted: var(--destructive-muted);
+  --color-destructive-muted-foreground: var(--destructive-muted-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-info-muted: var(--info-muted);
+  --color-info-muted-foreground: var(--info-muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+@layer base {
+  :lang(ar) {
+    font-family: var(--font-arabic);
+  }
+}

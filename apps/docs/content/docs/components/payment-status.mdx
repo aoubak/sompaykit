@@ -1,0 +1,81 @@
+---
+title: Payment status
+description: Waiting for PIN, awaiting confirmation, paid, failed and expired screens, plus a status badge.
+---
+
+<ComponentPreview name="payment-status" />
+
+## Install
+
+```npm
+npx shadcn@latest add https://sompaykit.dev/r/payment-status.json
+```
+
+## Usage
+
+Pair `PaymentStatusCard` with [`usePaymentStatus()`](/docs/react#usepaymentstatus):
+
+```tsx
+'use client';
+
+import { usePaymentStatus } from '@sompaykit/react';
+import { PaymentStatusCard } from '@/components/sompaykit/payment-status';
+
+export function OrderStatus({ referenceId }: { referenceId: string }) {
+  const { status, errorCode, requestError } = usePaymentStatus(referenceId, {
+    check: '/api/pay/status',
+  });
+
+  return (
+    <PaymentStatusCard
+      status={status}
+      errorCode={errorCode}
+      requestError={requestError}
+      amount={18}
+      currency="USD"
+      wallet="evc"
+      locale="so"
+      onRetry={() => location.reload()}
+    />
+  );
+}
+```
+
+Every state has an icon, a title and text, never color alone. Green means **paid** and nothing
+else. While checks fail (weak signal), the card shows a gentle notice and polling continues.
+
+`PaymentStatusBadge` is the small pill on its own, for order tables:
+
+```tsx
+import { PaymentStatusBadge } from '@/components/sompaykit/payment-status';
+
+<PaymentStatusBadge status="awaiting_confirmation" locale="en" />;
+```
+
+## Props
+
+### PaymentStatusCard
+
+| Prop             | Type                    | Default |                                              |
+| ---------------- | ----------------------- | ------- | -------------------------------------------- |
+| `status`         | `PaymentStatus \| null` | —       | Null shows "Checking your payment…".         |
+| `errorCode`      | `ErrorCode \| null`     | `null`  | Why it failed.                               |
+| `requestError`   | `ErrorCode \| null`     | `null`  | Shows the weak-connection notice.            |
+| `amount`         | `number`                | —       |                                              |
+| `currency`       | `'USD' \| 'SLSH'`       | `'USD'` |                                              |
+| `wallet`         | `Wallet`                | —       |                                              |
+| `phone`          | `string`                | —       | Shown as `+252 61 234 5678`.                 |
+| `expiresAt`      | `number \| Date`        | —       | While `pending`: shows a countdown.          |
+| `locale`         | `'so' \| 'en' \| 'ar'`  | `'so'`  |                                              |
+| `onRetry`        | `() => void`            | —       | "Try again" when failed or expired.          |
+| `onChangeWallet` | `() => void`            | —       | "Use another wallet" when failed or expired. |
+| `children`       | `ReactNode`             | —       | Extra content, e.g. order details.           |
+| `className`      | `string`                | —       |                                              |
+
+### PaymentStatusBadge
+
+| Prop        | Type                   | Default |
+| ----------- | ---------------------- | ------- |
+| `status`    | `PaymentStatus`        | —       |
+| `locale`    | `'so' \| 'en' \| 'ar'` | `'so'`  |
+| `className` | `string`               | —       |

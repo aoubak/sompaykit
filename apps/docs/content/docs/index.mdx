@@ -1,0 +1,124 @@
+---
+title: Getting started
+description: Accept EVC Plus, Zaad, Sahal and eDahab in a React or Next.js app.
+---
+
+SomPayKit has three parts. Use only the ones you need.
+
+| Part                                         | What it does                                                            | Runs on                            |
+| -------------------------------------------- | ----------------------------------------------------------------------- | ---------------------------------- |
+| [`@sompaykit/core`](/docs/core)              | Phone numbers, wallet detection, USSD codes, providers, error text      | Your server                        |
+| [`@sompaykit/react`](/docs/react)            | `usePayment` and `usePaymentStatus` hooks                               | The browser                        |
+| [Components](/docs/components/checkout-form) | shadcn/ui checkout form, wallet picker, manual pay card, status screens | The browser (copied into your app) |
+
+<Callout type="warn" title="Pre-release">
+  The packages are not on npm yet (first release: `0.1.0`). Wallet prefixes, USSD codes and currency
+  codes are still being checked with each operator; they all live in one file,
+  `packages/core/src/constants.ts`.
+</Callout>
+
+## Two ways to get paid
+
+- **Manual mode ($0 API fee).** The customer sends money to your own wallet number (the
+  "Dial to pay" button fills in the USSD code), then types the transaction ID. You confirm the
+  payment yourself. Works today, with no merchant account.
+- **Automatic mode.** The customer gets a PIN prompt on their phone and the gateway tells you
+  when it's paid. WaafiPay support is coming; it needs a merchant account and API keys.
+
+## Quick start (Next.js + shadcn/ui)
+
+<Steps>
+<Step>
+
+### Add the checkout form
+
+In a project that already uses [shadcn/ui](https://ui.shadcn.com/docs/installation) with
+Tailwind CSS v4:
+
+```npm
+npx shadcn@latest add https://sompaykit.dev/r/checkout-form.json
+```
+
+This copies `components/sompaykit/checkout-form.tsx` and `wallet-picker.tsx` into your app, adds
+the SomPayKit colors to your global CSS, and installs `@sompaykit/core` and `@sompaykit/react`.
+
+</Step>
+<Step>
+
+### Add a charge route on your server
+
+Gateway keys and wallet numbers stay here. **The total comes from your database**, never from the
+browser.
+
+```ts title="app/api/pay/route.ts"
+import { createSomPay, isSomPayError, toClientResult } from '@sompaykit/core';
+
+const sompay = createSomPay({
+  provider: 'manual',
+  merchantNumbers: { evc: process.env.EVC_NUMBER!, zaad: process.env.ZAAD_NUMBER! },
+});
+
+export async function POST(request: Request) {
+  const body = await request.json();
+  const order = await db.orders.find(body.orderId); // your database
+  try {
+    const result = await sompay.charge({
+      referenceId: body.referenceId, // unique per attempt: a resend returns the same payment
+      orderId: order.id,
+      phone: body.phone,
+      wallet: body.wallet,
+      amount: order.total,
+      currency: 'USD',
+    });
+    return Response.json(toClientResult(result));
+  } catch (error) {
+    if (isSomPayError(error)) return Response.json({ errorCode: error.code }, { status: 400 });
+    throw error;
+  }
+}
+```
+
+</Step>
+<Step>
+
+### Show the form
+
+```tsx title="app/checkout/page.tsx"
+'use client';
+
+import { CheckoutForm } from '@/components/sompaykit/checkout-form';
+
+export default function CheckoutPage() {
+  return (
+    <CheckoutForm
+      charge="/api/pay"
+      orderId="order_123"
+      amount={18} // display only
+      currency="USD"
+      locale="so"
+      onResult={(result) => {
+        // Manual mode: result.instructions → show <ManualPayCard />
+      }}
+    />
+  );
+}
+```
+
+</Step>
+<Step>
+
+### Follow the payment
+
+Show [`ManualPayCard`](/docs/components/manual-pay-card) with `result.instructions`, then
+[`PaymentStatusCard`](/docs/components/payment-status) with
+[`usePaymentStatus`](/docs/react#usepaymentstatus) until the payment is paid.
+
+</Step>
+</Steps>
+
+## Rules that keep money safe
+
+1. Gateway keys and API secrets live on your server only. Never use a `NEXT_PUBLIC_` variable.
+2. Calculate the total on your server. The hooks never send an amount.
+3. Every payment attempt has a unique `referenceId`; resending it never charges twice.
+4. Never log full phone numbers or credentials. Use `maskPhone()` in logs.

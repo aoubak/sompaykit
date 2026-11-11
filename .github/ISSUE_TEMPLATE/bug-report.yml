@@ -1,0 +1,30 @@
+name: Bug report
+description: Something doesn't work as documented.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Never paste API keys, merchant credentials or full customer phone numbers.
+  - type: input
+    id: package
+    attributes:
+      label: Package or component
+      placeholder: '@sompaykit/core 0.1.0, checkout-form, docs…'
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected, and what happened
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: Browser, phone or Node.js version

@@ -1,0 +1,23 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "jsx": "preserve",
+    "allowJs": true,
+    "esModuleInterop": true,
+    "noEmit": true,
+    "incremental": true,
+    "declaration": false,
+    // Server files import each other as `./x.ts` so Node can run them without a build.
+    "allowImportingTsExtensions": true,
+    "types": ["node"],
+    "plugins": [{ "name": "next" }],
+    "paths": {
+      "~/*": ["./*"],
+      "@/components/*": ["../../registry/src/components/*"],
+      "@/lib/*": ["../../registry/src/lib/*"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.mjs", ".next/types/**/*.ts"],
+  "exclude": ["node_modules", "out", ".next"]
+}

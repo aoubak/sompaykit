@@ -1,0 +1,14 @@
+node_modules
+dist
+coverage
+.turbo
+.next
+pnpm-lock.yaml
+docs/mockups
+.changeset/*.md
+/*.md
+/docs
+out
+.source
+apps/docs/public/r
+next-env.d.ts

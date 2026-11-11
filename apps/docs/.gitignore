@@ -1,0 +1,5 @@
+.source/
+out/
+next-env.d.ts
+# Copied from registry/dist/r at build time.
+public/r/

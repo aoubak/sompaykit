@@ -1,0 +1,91 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "sompaykit",
+  "homepage": "https://sompaykit.dev",
+  "items": [
+    {
+      "name": "sompaykit-base",
+      "type": "registry:lib",
+      "title": "SomPayKit base",
+      "description": "Theme tokens (purple + paid green), so/en/ar UI strings, money and phone formatting, and inline icons. Installed automatically by every SomPayKit component.",
+      "dependencies": ["@sompaykit/core"],
+      "files": [
+        {
+          "path": "src/lib/sompaykit-i18n.ts",
+          "type": "registry:lib",
+          "target": "lib/sompaykit-i18n.ts"
+        },
+        {
+          "path": "src/lib/sompaykit-format.ts",
+          "type": "registry:lib",
+          "target": "lib/sompaykit-format.ts"
+        },
+        {
+          "path": "src/components/sompaykit/icons.tsx",
+          "type": "registry:component",
+          "target": "components/sompaykit/icons.tsx"
+        }
+      ]
+    },
+    {
+      "name": "wallet-picker",
+      "type": "registry:component",
+      "title": "Wallet picker",
+      "description": "Radio cards for EVC Plus, Zaad, Sahal and eDahab.",
+      "dependencies": ["@sompaykit/core"],
+      "registryDependencies": ["sompaykit-base"],
+      "files": [
+        {
+          "path": "src/components/sompaykit/wallet-picker.tsx",
+          "type": "registry:component",
+          "target": "components/sompaykit/wallet-picker.tsx"
+        }
+      ]
+    },
+    {
+      "name": "checkout-form",
+      "type": "registry:component",
+      "title": "Checkout form",
+      "description": "Name, Somali phone number with wallet detection, wallet picker, total and Pay button. Starts the payment with usePayment().",
+      "dependencies": ["@sompaykit/core", "@sompaykit/react"],
+      "registryDependencies": ["button", "input", "sompaykit-base", "wallet-picker"],
+      "files": [
+        {
+          "path": "src/components/sompaykit/checkout-form.tsx",
+          "type": "registry:component",
+          "target": "components/sompaykit/checkout-form.tsx"
+        }
+      ]
+    },
+    {
+      "name": "manual-pay-card",
+      "type": "registry:component",
+      "title": "Manual pay card",
+      "description": "Manual mode ($0 API fee): amount, merchant number with Copy, USSD \"Dial to pay\" button, transaction ID and optional screenshot.",
+      "dependencies": ["@sompaykit/core"],
+      "registryDependencies": ["button", "input", "sompaykit-base"],
+      "files": [
+        {
+          "path": "src/components/sompaykit/manual-pay-card.tsx",
+          "type": "registry:component",
+          "target": "components/sompaykit/manual-pay-card.tsx"
+        }
+      ]
+    },
+    {
+      "name": "payment-status",
+      "type": "registry:component",
+      "title": "Payment status",
+      "description": "Waiting for PIN, awaiting confirmation, paid, failed and expired screens, plus a status badge. Pair with usePaymentStatus().",
+      "dependencies": ["@sompaykit/core"],
+      "registryDependencies": ["button", "sompaykit-base"],
+      "files": [
+        {
+          "path": "src/components/sompaykit/payment-status.tsx",
+          "type": "registry:component",
+          "target": "components/sompaykit/payment-status.tsx"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    // DOM gives the standard fetch / AbortSignal / URL types that Node 20+, Bun,
+    // Deno, edge runtimes and browsers all share. No @types/node on purpose.
+    "lib": ["ES2022", "DOM"],
+    "types": []
+  },
+  "include": ["src", "test", "tsup.config.ts", "vitest.config.ts"]
+}

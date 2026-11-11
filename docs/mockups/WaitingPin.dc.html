@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Enter your PIN</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#5B2FD1}a:hover{color:#4421A8}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F6F5FA; font-family: 'Geist', system-ui, sans-serif; color: #18181B; display: flex; flex-direction: column; overflow: hidden">
+  <main style="flex: 1; padding: 64px 20px 16px; display: flex; flex-direction: column; align-items: center; gap: 24px; text-align: center">
+    <div style="position: relative; width: 120px; height: 120px; border-radius: 999px; background: #DBEAFE; display: flex; align-items: center; justify-content: center; color: #1D4ED8">
+      <div style="position: absolute; inset: -8px; border-radius: 999px; border: 3px solid #BFDBFE; border-top-color: #1D4ED8"></div>
+      <svg aria-hidden="true" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"></rect><path d="M10 6h4M11 18h2"></path></svg>
+    </div>
+    <div role="status" aria-live="polite" style="display: flex; flex-direction: column; gap: 8px">
+      <span style="align-self: center; font-size: 12px; font-weight: 600; padding: 6px 10px; border-radius: 999px; background: #DBEAFE; color: #1E3A8A">● Waiting for PIN</span>
+      <h1 style="margin: 0; font-size: 24px; font-weight: 700">Check your phone</h1>
+      <p style="margin: 0; font-size: 15px; line-height: 22px; color: #52525B">A payment request for <strong style="color: #18181B">$18.00</strong> was sent to <span dir="ltr" style="color: #18181B; font-weight: 600">+252 61 234 5678</span>. Enter your EVC Plus PIN to approve it.</p>
+    </div>
+
+    <div style="width: 100%; padding: 14px 16px; border-radius: 14px; background: #FFFFFF; border: 1px solid #E4E4E7; display: flex; flex-direction: column; gap: 10px">
+      <div style="display: flex; justify-content: space-between; font-size: 14px"><span style="color: #52525B">Time left</span><span style="font-weight: 600; font-variant-numeric: tabular-nums">01:42</span></div>
+      <div style="height: 6px; border-radius: 999px; background: #E4E4E7; overflow: hidden"><div style="width: 56%; height: 100%; background: #1D4ED8"></div></div>
+      <span style="font-size: 13px; color: #52525B; text-align: left">Don't close this page. It updates on its own.</span>
+    </div>
+
+    <p style="margin: 0; font-size: 13px; line-height: 19px; color: #52525B">No prompt? Make sure your phone has signal and the number is correct.</p>
+  </main>
+
+  <div style="padding: 12px 16px 20px; display: flex; flex-direction: column; gap: 8px">
+    <button type="button" style="height: 52px; border-radius: 14px; border: 1px solid #D4D4D8; background: #FFFFFF; color: #18181B; font: inherit; font-size: 16px; font-weight: 600">Resend payment request</button>
+    <div style="display: flex; gap: 8px">
+      <a href="Success.dc.html" style="flex: 1; height: 44px; border-radius: 12px; border: 1px dashed #A1A1AA; color: #3F3F46; text-decoration: none; display: flex; align-items: center; justify-content: center; font-size: 13px">Prototype: approved →</a>
+      <a href="Failed.dc.html" style="flex: 1; height: 44px; border-radius: 12px; border: 1px dashed #A1A1AA; color: #3F3F46; text-decoration: none; display: flex; align-items: center; justify-content: center; font-size: 13px">Prototype: failed →</a>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

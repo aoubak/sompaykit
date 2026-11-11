@@ -1,0 +1,181 @@
+---
+title: Core
+description: '@sompaykit/core: phone numbers, wallets, USSD codes and payment providers. Zero dependencies.'
+---
+
+```npm
+npm install @sompaykit/core
+```
+
+Runs in Node 20+, Bun, Deno, edge and serverless. It only uses `fetch`, and has no dependencies.
+
+<Callout type="error" title="Server only for automatic providers">
+  `createSomPay()` with a gateway provider holds your API keys. Call it from server code (API
+  routes, server actions) and read keys from server environment variables. The helpers
+  (`normalizePhone`, `detectWallet`, `message`…) are safe in the browser.
+</Callout>
+
+## createSomPay
+
+```ts
+import { createSomPay } from '@sompaykit/core';
+
+const sompay = createSomPay({
+  provider: 'manual',
+  merchantNumbers: { evc: '612345678', zaad: '634567890' }, // leave a wallet out to hide it
+  expiryHours: 24, // optional: unconfirmed payments expire after this
+});
+```
+
+| Provider   | Mode                                       | Status                              |
+| ---------- | ------------------------------------------ | ----------------------------------- |
+| `manual`   | Customer sends money, types transaction ID | Ready                               |
+| `waafipay` | PIN prompt on the customer's phone         | Coming (waiting for sandbox access) |
+
+## charge
+
+Starts a payment. Bad input throws a `SomPayError` **before** any payment is attempted. Payment
+outcomes (declined, timeout…) come back in the result.
+
+```ts
+const result = await sompay.charge({
+  referenceId: 'spk_7f3a…', // 1–64 of A-Z a-z 0-9 _ . : -  — unique per attempt
+  orderId: 'order_123', // optional, defaults to referenceId
+  phone: '061 234 5678', // any common format
+  amount: 18, // from your database
+  currency: 'USD', // 'USD' | 'SLSH'
+  wallet: 'evc', // optional: detected from the phone prefix if left out
+  description: 'Order #123', // optional
+});
+```
+
+Calling `charge()` again with the same `referenceId` returns the same payment instead of creating
+a second one.
+
+### Result
+
+```ts
+interface CreatePaymentResult {
+  referenceId: string;
+  status: PaymentStatus;
+  providerTxnId?: string;
+  instructions?: ManualInstructions; // manual mode only
+  errorCode?: ErrorCode; // when status is 'failed'
+  raw?: unknown; // gateway response, for disputes: never send it to the browser
+}
+```
+
+Return `toClientResult(result)` from your API route: it drops `raw`.
+
+### Payment statuses
+
+| Status                  | Meaning                                             | Final |
+| ----------------------- | --------------------------------------------------- | ----- |
+| `pending`               | Automatic mode: waiting for the customer's PIN      | No    |
+| `awaiting_proof`        | Manual mode: waiting for the customer to pay        | No    |
+| `awaiting_confirmation` | Manual mode: transaction ID sent, merchant to check | No    |
+| `paid`                  | Paid                                                | Yes   |
+| `failed`                | Declined, cancelled, no balance… see `errorCode`    | Yes   |
+| `expired`               | Not paid in time                                    | Yes   |
+
+`isFinalStatus(status)` tells you when to stop polling.
+
+### Manual instructions
+
+```ts
+interface ManualInstructions {
+  wallet: 'evc' | 'zaad' | 'sahal' | 'edahab';
+  number: string; // merchant number, local form: '612345678'
+  amount: number;
+  currency: 'USD' | 'SLSH';
+  ussdCode: string | null; // '*712*612345678*18#', or null if unknown for this wallet
+  ussdLink: string | null; // 'tel:*712*612345678*18%23' for a "Dial to pay" button
+}
+```
+
+Pass it straight to [`ManualPayCard`](/docs/components/manual-pay-card).
+
+## status
+
+```ts
+const status = await sompay.status('spk_7f3a…'); // PaymentStatus
+```
+
+In manual mode your database is the source of truth: you set `awaiting_confirmation` when the
+customer sends a transaction ID and `paid` when you confirm it.
+
+## Phone numbers and wallets
+
+```ts
+import { detectWallet, maskPhone, normalizePhone, toNationalNumber } from '@sompaykit/core';
+
+normalizePhone('+252 61 234 5678'); // '252612345678'
+normalizePhone('0612345678'); // '252612345678'
+normalizePhone('12'); // null
+toNationalNumber('252612345678'); // '612345678'
+maskPhone('252612345678'); // '252 61 *** 5678': safe for logs
+detectWallet('63 123 4567'); // 'zaad'
+```
+
+<Callout type="warn" title="Detection is a suggestion">
+  Numbers can move between operators, so always let the customer pick another wallet. The prefix
+  table and USSD codes are marked VERIFY in `constants.ts` until each operator confirms them.
+</Callout>
+
+| Prefix     | Wallet   | Operator |
+| ---------- | -------- | -------- |
+| `61`, `77` | EVC Plus | Hormuud  |
+| `63`       | Zaad     | Telesom  |
+| `90`       | Sahal    | Golis    |
+| `62`, `65` | eDahab   | Somtel   |
+
+`WALLETS` has each wallet's name, operator and a short label; `MOBILE_WALLETS` lists the four
+phone wallets in display order.
+
+## USSD codes
+
+```ts
+import { buildUssdCode, ussdLink } from '@sompaykit/core';
+
+const code = buildUssdCode('evc', '612345678', 18); // '*712*612345678*18#'
+if (code) ussdLink(code); // 'tel:*712*612345678*18%23'
+```
+
+Only EVC Plus has a known pattern so far. Other wallets return `null`: show the number with a Copy
+button instead (`ManualPayCard` does this for you).
+
+## Errors
+
+Every error has a stable code and a message in Somali, English and Arabic.
+
+```ts
+import { isSomPayError, message } from '@sompaykit/core';
+
+try {
+  await sompay.charge(input);
+} catch (error) {
+  if (isSomPayError(error)) {
+    error.code; // 'INVALID_NUMBER'
+    message(error.code, 'so'); // Somali text for the customer
+  }
+}
+```
+
+| Code                   | When                                                  |
+| ---------------------- | ----------------------------------------------------- |
+| `INSUFFICIENT_FUNDS`   | Not enough balance                                    |
+| `DECLINED`             | The wallet declined                                   |
+| `CANCELLED`            | The customer cancelled the PIN prompt                 |
+| `TIMEOUT`              | No PIN in time                                        |
+| `NETWORK_ERROR`        | No connection to your server or the gateway           |
+| `PROVIDER_ERROR`       | The gateway returned something unexpected             |
+| `INVALID_NUMBER`       | Not a Somali mobile number                            |
+| `INVALID_AMOUNT`       | Not positive, over 1,000,000, or more than 2 decimals |
+| `INVALID_CURRENCY`     | Not `USD` or `SLSH`                                   |
+| `INVALID_REFERENCE`    | Missing or badly formed `referenceId`                 |
+| `WALLET_REQUIRED`      | No wallet given and none detected                     |
+| `WALLET_NOT_SUPPORTED` | The provider or merchant doesn't take it              |
+| `DUPLICATE_REFERENCE`  | Same `referenceId`, different payment                 |
+| `NOT_FOUND`            | Unknown `referenceId`                                 |
+| `NOT_IMPLEMENTED`      | Provider not available yet                            |
+| `CONFIG_ERROR`         | Missing keys or bad options                           |

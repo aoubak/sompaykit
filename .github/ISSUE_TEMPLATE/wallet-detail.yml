@@ -1,0 +1,39 @@
+name: Wallet detail
+description: Confirm or correct a phone prefix, USSD code or gateway fact (the VERIFY items).
+labels: [verify]
+body:
+  - type: dropdown
+    id: wallet
+    attributes:
+      label: Wallet
+      options: [EVC Plus (Hormuud), Zaad (Telesom), Sahal (Golis), eDahab (Somtel), Other]
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What are you confirming?
+      options:
+        [
+          Phone number prefix,
+          USSD "send money" code,
+          Number length,
+          Gateway (WaafiPay / SifaloPay) behaviour,
+          Other,
+        ]
+    validations:
+      required: true
+  - type: textarea
+    id: detail
+    attributes:
+      label: The detail
+      description: 'For example: "Send money is *XXX*NUMBER*AMOUNT#" or "numbers starting 68 are …".'
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: How do you know?
+      description: Tried it on your own phone (when?), operator website or official document (link). Don't share anyone's real number.
+    validations:
+      required: true

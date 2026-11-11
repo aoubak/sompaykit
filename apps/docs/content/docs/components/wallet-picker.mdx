@@ -1,0 +1,45 @@
+---
+title: Wallet picker
+description: Radio cards for EVC Plus, Zaad, Sahal and eDahab.
+---
+
+<ComponentPreview name="wallet-picker" />
+
+## Install
+
+```npm
+npx shadcn@latest add https://sompaykit.dev/r/wallet-picker.json
+```
+
+Already included with the [checkout form](/docs/components/checkout-form).
+
+## Usage
+
+```tsx
+'use client';
+
+import type { MobileWallet } from '@sompaykit/core';
+import { useState } from 'react';
+import { WalletPicker } from '@/components/sompaykit/wallet-picker';
+
+export function PickWallet() {
+  const [wallet, setWallet] = useState<MobileWallet | null>(null);
+  return <WalletPicker value={wallet} onChange={setWallet} name="wallet" locale="so" />;
+}
+```
+
+Native radio buttons underneath, so arrow keys, form submission and screen readers work as
+expected. Each card is at least 60px tall for easy tapping.
+
+## Props
+
+| Prop        | Type                             | Default    |                                  |
+| ----------- | -------------------------------- | ---------- | -------------------------------- |
+| `value`     | `MobileWallet \| null`           | —          |                                  |
+| `onChange`  | `(wallet: MobileWallet) => void` | —          |                                  |
+| `wallets`   | `MobileWallet[]`                 | all four   | Wallets to offer, in order.      |
+| `locale`    | `'so' \| 'en' \| 'ar'`           | `'so'`     |                                  |
+| `legend`    | `string`                         | "Pay with" | Overrides the translated legend. |
+| `name`      | `string`                         | auto       | Form field name.                 |
+| `disabled`  | `boolean`                        | `false`    |                                  |
+| `className` | `string`                         | —          |                                  |

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SomPayKit UI Style</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#5B2FD1}a:hover{color:#4421A8}
+</style>
+</helmet>
+<div style="width: 1240px; height: 800px; box-sizing: border-box; padding: 56px; background: #F6F5FA; font-family: 'Geist', system-ui, sans-serif; color: #18181B; display: flex; flex-direction: column; gap: 32px">
+  <div style="display: flex; align-items: center; gap: 16px">
+    <div style="width: 48px; height: 48px; border-radius: 14px; background: {{primary}}; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 22px">S</div>
+    <div style="display: flex; flex-direction: column; gap: 4px">
+      <h1 style="margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.02em">SomPayKit UI Style</h1>
+      <p style="margin: 0; font-size: 15px; color: #52525B">Mobile-first commerce + payments for Somalia. Purple drives action. Green only means paid.</p>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; flex: 1">
+    <section style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+      <h2 style="margin: 0; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #52525B">Colour</h2>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+        <div style="display: flex; flex-direction: column; gap: 6px"><div style="height: 56px; border-radius: 10px; background: {{primary}}"></div><span style="font-size: 13px; font-weight: 600">Primary</span><span style="font-size: 12px; color: #52525B">Buttons, links, focus</span></div>
+        <div style="display: flex; flex-direction: column; gap: 6px"><div style="height: 56px; border-radius: 10px; background: {{accent}}"></div><span style="font-size: 13px; font-weight: 600">Paid green</span><span style="font-size: 12px; color: #52525B">Success states only</span></div>
+        <div style="display: flex; flex-direction: column; gap: 6px"><div style="height: 56px; border-radius: 10px; background: #18181B"></div><span style="font-size: 13px; font-weight: 600">Ink</span><span style="font-size: 12px; color: #52525B">Text</span></div>
+        <div style="display: flex; flex-direction: column; gap: 6px"><div style="height: 56px; border-radius: 10px; background: #F6F5FA; border: 1px solid #E4E4E7"></div><span style="font-size: 13px; font-weight: 600">Surface</span><span style="font-size: 12px; color: #52525B">Page ground</span></div>
+        <div style="display: flex; flex-direction: column; gap: 6px"><div style="height: 56px; border-radius: 10px; background: #B45309"></div><span style="font-size: 13px; font-weight: 600">Warning</span><span style="font-size: 12px; color: #52525B">Awaiting confirmation</span></div>
+        <div style="display: flex; flex-direction: column; gap: 6px"><div style="height: 56px; border-radius: 10px; background: #B91C1C"></div><span style="font-size: 13px; font-weight: 600">Danger</span><span style="font-size: 12px; color: #52525B">Failed, reject</span></div>
+      </div>
+    </section>
+
+    <section style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+      <h2 style="margin: 0; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #52525B">Type · Geist / Plex Arabic</h2>
+      <div style="display: flex; flex-direction: column; gap: 14px">
+        <div style="font-size: 32px; font-weight: 700; letter-spacing: -0.02em; line-height: 40px">$18.00</div>
+        <div style="font-size: 24px; font-weight: 600; line-height: 32px">Checkout</div>
+        <div style="font-size: 20px; font-weight: 600; line-height: 28px">Choose a wallet</div>
+        <div style="font-size: 16px; line-height: 24px">Body 16 — never smaller on mobile inputs.</div>
+        <div style="font-size: 14px; line-height: 20px; color: #52525B">Helper 14 — hints and secondary info.</div>
+        <div style="font-size: 12px; line-height: 16px; color: #52525B">Caption 12 — badges and legal</div>
+        <div dir="rtl" lang="ar" style="font-family: 'IBM Plex Sans Arabic', 'Noto Sans Arabic', sans-serif; font-size: 18px; font-weight: 600">الدفع عبر المحفظة</div>
+      </div>
+    </section>
+
+    <section style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+      <h2 style="margin: 0; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #52525B">Components</h2>
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <button type="button" style="height: 48px; border: 0; border-radius: 12px; background: {{primary}}; color: #FFFFFF; font: inherit; font-size: 16px; font-weight: 600">Pay $18.00</button>
+        <div style="display: flex; gap: 10px">
+          <button type="button" style="flex: 1; height: 44px; border: 1px solid #D4D4D8; border-radius: 12px; background: #FFFFFF; color: #18181B; font: inherit; font-size: 15px; font-weight: 500">Secondary</button>
+          <button type="button" disabled style="flex: 1; height: 44px; border: 0; border-radius: 12px; background: #E4E4E7; color: #71717A; font: inherit; font-size: 15px; font-weight: 500">Disabled</button>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <label for="demo-phone" style="font-size: 14px; font-weight: 500">Phone number</label>
+        <div style="display: flex; align-items: center; height: 48px; border: 2px solid {{primary}}; border-radius: 12px; overflow: hidden">
+          <span style="padding: 0 12px; font-size: 16px; color: #52525B; border-right: 1px solid #E4E4E7; height: 100%; display: flex; align-items: center">+252</span>
+          <input id="demo-phone" value="61 234 5678" style="flex: 1; min-width: 0; border: 0; outline: 0; padding: 0 12px; font: inherit; font-size: 16px">
+          <span style="margin-right: 10px; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 999px; background: #EDE7FC; color: #4421A8">EVC Plus</span>
+        </div>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px">
+        <span style="font-size: 12px; font-weight: 600; padding: 6px 10px; border-radius: 999px; background: #DBEAFE; color: #1E3A8A">● Waiting for PIN</span>
+        <span style="font-size: 12px; font-weight: 600; padding: 6px 10px; border-radius: 999px; background: #FEF3C7; color: #78350F">◷ Awaiting confirmation</span>
+        <span style="font-size: 12px; font-weight: 600; padding: 6px 10px; border-radius: 999px; background: #DCF5E9; color: #0F5132">✓ Paid</span>
+        <span style="font-size: 12px; font-weight: 600; padding: 6px 10px; border-radius: 999px; background: #FEE2E2; color: #7F1D1D">✕ Failed</span>
+        <span style="font-size: 12px; font-weight: 600; padding: 6px 10px; border-radius: 999px; background: #F4F4F5; color: #3F3F46">Expired</span>
+      </div>
+      <p style="margin: 0; font-size: 12px; color: #52525B">Radius 12 · touch targets ≥ 44px · status = colour + icon + text</p>
+    </section>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"primary":{"editor":"color","default":"#5B2FD1","options":["#5B2FD1","#6D28D9","#4338CA"]},"accent":{"editor":"color","default":"#157A52","options":["#157A52","#15803D","#0F766E"]},"$preview":{"width":1240,"height":800}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { primary: this.props.primary ?? '#5B2FD1', accent: this.props.accent ?? '#157A52' };
+  }
+}
+</script>
+</body>
+</html>

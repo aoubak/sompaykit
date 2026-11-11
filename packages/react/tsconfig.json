@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    // DOM gives fetch / AbortSignal / crypto types shared by browsers and edge runtimes.
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": [],
+    "jsx": "react-jsx"
+  },
+  "include": ["src", "test", "tsup.config.ts", "vitest.config.ts"]
+}

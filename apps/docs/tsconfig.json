@@ -1,0 +1,26 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "jsx": "preserve",
+    "allowJs": true,
+    "noEmit": true,
+    "incremental": true,
+    "declaration": false,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      // Docs code.
+      "~/*": ["./*"],
+      // Registry items import shadcn-style `@/…` paths; point them at the registry source.
+      "@/components/*": ["../../registry/src/components/*"],
+      "@/lib/*": ["../../registry/src/lib/*"]
+    },
+    "esModuleInterop": true
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".source/**/*.ts", ".next/types/**/*.ts"],
+  "exclude": ["node_modules", "out", ".next"]
+}

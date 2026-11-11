@@ -1,0 +1,138 @@
+---
+title: React hooks
+description: 'usePayment and usePaymentStatus: start a payment and follow it until it is paid.'
+---
+
+```npm
+npm install @sompaykit/react @sompaykit/core
+```
+
+The hooks only call **your own API routes**. Your server holds the gateway keys and calls
+`sompay.charge()` and `sompay.status()` from [`@sompaykit/core`](/docs/core).
+
+```tsx
+'use client';
+
+import { message } from '@sompaykit/core';
+import { usePayment, usePaymentStatus } from '@sompaykit/react';
+
+export function Checkout({ orderId }: { orderId: string }) {
+  const payment = usePayment({ charge: '/api/pay' });
+  const status = usePaymentStatus(payment.referenceId, {
+    check: '/api/pay/status',
+    enabled: payment.result !== null,
+  });
+
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        const data = new FormData(e.currentTarget);
+        void payment.pay({ phone: String(data.get('phone')), orderId });
+      }}
+    >
+      <input name="phone" type="tel" inputMode="numeric" />
+      <button disabled={payment.isSubmitting}>Pay</button>
+      {payment.errorCode && <p role="alert">{message(payment.errorCode, 'so')}</p>}
+      <p aria-live="polite">{status.status}</p>
+    </form>
+  );
+}
+```
+
+## usePayment
+
+```ts
+const payment = usePayment({
+  charge: '/api/pay', // or (body, signal) => Promise<ClientPaymentResult>
+  headers: { 'x-csrf-token': token }, // optional
+  timeoutMs: 30_000, // optional, default 30 s (slow mobile data)
+});
+```
+
+| Returns        | Type                                                   |                                                   |
+| -------------- | ------------------------------------------------------ | ------------------------------------------------- |
+| `pay(request)` | `(PayRequest) => Promise<ClientPaymentResult \| null>` | Starts a payment. Resolves to null on error.      |
+| `reset()`      | `() => void`                                           | Fresh start, e.g. "Use another wallet".           |
+| `isSubmitting` | `boolean`                                              | Disable the Pay button while true.                |
+| `result`       | `ClientPaymentResult \| null`                          | What your server returned.                        |
+| `errorCode`    | `ErrorCode \| null`                                    | Bad input, failed request, or `result.errorCode`. |
+| `referenceId`  | `string \| null`                                       | The current attempt's ID, for `usePaymentStatus`. |
+
+```ts
+interface PayRequest {
+  phone: string;
+  wallet?: Wallet;
+  orderId?: string; // your server looks up the total with it
+  customerName?: string;
+}
+```
+
+There is **no amount** on purpose: your server calculates the total.
+
+**Safe on slow connections**
+
+- A second `pay()` while one is running returns the same promise: a double-tapped Pay button never
+  charges twice.
+- After `NETWORK_ERROR`, `PROVIDER_ERROR` or `TIMEOUT`, paying again with the same details reuses
+  the same `referenceId`, so your server returns the payment it may already have made.
+- Phone numbers are checked in the browser first; `INVALID_NUMBER` never reaches your server.
+
+## usePaymentStatus
+
+```ts
+const { status, errorCode, requestError, isFinal, refresh } = usePaymentStatus(referenceId, {
+  check: '/api/pay/status', // or (referenceId, signal) => Promise<StatusResponse>
+  intervalMs: 3000, // default
+  maxIntervalMs: 30_000, // default: the wait doubles up to this while requests fail
+  enabled: true,
+  initialStatus: 'awaiting_proof', // a status you already know
+});
+```
+
+Pass `null` as the `referenceId` until you have one. Polling stops at `paid`, `failed` or
+`expired`.
+
+| Returns        | Type                    |                                                         |
+| -------------- | ----------------------- | ------------------------------------------------------- |
+| `status`       | `PaymentStatus \| null` | Latest known status; null before the first answer.      |
+| `errorCode`    | `ErrorCode \| null`     | Why it failed, when `status` is `failed`.               |
+| `requestError` | `ErrorCode \| null`     | The last check failed (weak signal). Polling continues. |
+| `isFinal`      | `boolean`               | Polling has stopped.                                    |
+| `refresh()`    | `() => void`            | Check now, e.g. from a Refresh button.                  |
+
+## Your API routes
+
+The default (URL) transport expects:
+
+| Hook               | Request                                                                         | Success (200)            |
+| ------------------ | ------------------------------------------------------------------------------- | ------------------------ |
+| `usePayment`       | `POST /api/pay` JSON `{ referenceId, phone, wallet?, orderId?, customerName? }` | `toClientResult(result)` |
+| `usePaymentStatus` | `GET /api/pay/status?referenceId=…`                                             | `{ status, errorCode? }` |
+
+On any error, answer with a non-2xx status and JSON `{ "errorCode": "…" }`.
+
+```ts title="app/api/pay/status/route.ts"
+export async function GET(request: Request) {
+  const referenceId = new URL(request.url).searchParams.get('referenceId');
+  const payment = referenceId ? await db.payments.find(referenceId) : null;
+  if (!payment) return Response.json({ errorCode: 'NOT_FOUND' }, { status: 404 });
+  return Response.json({ status: payment.status, errorCode: payment.errorCode ?? undefined });
+}
+```
+
+Need custom auth or another API shape? Pass functions instead of URLs:
+
+```ts
+usePayment({ charge: (body, signal) => myApi.pay(body, { signal }) });
+usePaymentStatus(id, { check: (ref, signal) => myApi.status(ref, { signal }) });
+```
+
+## Other exports
+
+| Export                                   | Use                                                     |
+| ---------------------------------------- | ------------------------------------------------------- |
+| `createReferenceId()`                    | `spk_` + 32 random hex characters                       |
+| `chargeViaUrl(url)`, `statusViaUrl(url)` | The default transports, to wrap or reuse                |
+| `PaymentRequestError`, `toErrorCode()`   | Errors thrown by transports; any value → an `ErrorCode` |
+| `startStatusPoller()`                    | The polling loop without React                          |

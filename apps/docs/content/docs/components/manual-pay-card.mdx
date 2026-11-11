@@ -1,0 +1,76 @@
+---
+title: Manual pay card
+description: 'Manual mode ($0 API fee): exact amount, merchant number with Copy, "Dial to pay" and the transaction ID.'
+---
+
+<ComponentPreview name="manual-pay-card" />
+
+## Install
+
+```npm
+npx shadcn@latest add https://sompaykit.dev/r/manual-pay-card.json
+```
+
+## Usage
+
+Show it after a manual-mode charge, with `result.instructions` from your server.
+
+```tsx
+'use client';
+
+import type { ManualInstructions } from '@sompaykit/core';
+import { useState } from 'react';
+import { ManualPayCard } from '@/components/sompaykit/manual-pay-card';
+
+export function PayByHand({
+  referenceId,
+  instructions,
+}: {
+  referenceId: string;
+  instructions: ManualInstructions;
+}) {
+  const [sending, setSending] = useState(false);
+
+  return (
+    <ManualPayCard
+      instructions={instructions}
+      storeName="Hodan Store"
+      locale="so"
+      isSubmitting={sending}
+      onSubmitProof={async ({ transactionId, screenshot }) => {
+        setSending(true);
+        const form = new FormData();
+        form.set('referenceId', referenceId);
+        form.set('transactionId', transactionId);
+        if (screenshot) form.set('screenshot', screenshot);
+        await fetch('/api/pay/proof', { method: 'POST', body: form }); // → awaiting_confirmation
+        setSending(false);
+      }}
+      whatsappUrl="https://wa.me/252612345678"
+    />
+  );
+}
+```
+
+- **Dial to pay** opens the phone's dialler with the USSD code filled in (EVC Plus today). For
+  wallets without a known code, the card shows the number and Copy button only.
+- Your proof route saves the transaction ID and sets the payment to `awaiting_confirmation`. You
+  confirm it yourself after checking your wallet's SMS.
+
+<Callout type="warn">
+  USSD codes are marked VERIFY in `@sompaykit/core` until each operator confirms them.
+</Callout>
+
+## Props
+
+| Prop              | Type                                      | Default |                                       |
+| ----------------- | ----------------------------------------- | ------- | ------------------------------------- |
+| `instructions`    | `ManualInstructions`                      | —       | From `result.instructions`.           |
+| `onSubmitProof`   | `({ transactionId, screenshot }) => void` | —       | Can return a promise.                 |
+| `storeName`       | `string`                                  | —       | "…to **Hodan Store**".                |
+| `locale`          | `'so' \| 'en' \| 'ar'`                    | `'so'`  |                                       |
+| `isSubmitting`    | `boolean`                                 | `false` | Disables the button, shows a spinner. |
+| `errorCode`       | `ErrorCode \| null`                       | `null`  | An error from your proof route.       |
+| `allowScreenshot` | `boolean`                                 | `true`  | Optional SMS screenshot upload.       |
+| `whatsappUrl`     | `string`                                  | —       | Shows a "Need help?" link.            |
+| `className`       | `string`                                  | —       |                                       |

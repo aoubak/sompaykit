@@ -1,0 +1,23 @@
+@import 'tailwindcss';
+/* The SomPayKit theme, the same file the registry ships. */
+@import '../../../registry/src/styles/sompaykit.css';
+
+@source '../../../registry/src';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* @fontsource-variable/geist names the family 'Geist Variable'. */
+@theme inline {
+  --font-sans: 'Geist Variable', 'Geist', 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  body {
+    background: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+  }
+}

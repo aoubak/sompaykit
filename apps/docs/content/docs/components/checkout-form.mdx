@@ -1,0 +1,67 @@
+---
+title: Checkout form
+description: Name, Somali phone number with wallet detection, wallet picker, total and Pay button.
+---
+
+<ComponentPreview name="checkout-form" />
+
+## Install
+
+```npm
+npx shadcn@latest add https://sompaykit.dev/r/checkout-form.json
+```
+
+Adds `components/sompaykit/checkout-form.tsx`, the [wallet picker](/docs/components/wallet-picker),
+shadcn's `button` and `input`, and `sompaykit-base` (theme colors, so/en/ar strings, formatters,
+icons). Installs `@sompaykit/core` and `@sompaykit/react`.
+
+## Usage
+
+```tsx
+'use client';
+
+import { CheckoutForm } from '@/components/sompaykit/checkout-form';
+
+export function Checkout({ order }: { order: { id: string; total: number; items: number } }) {
+  return (
+    <CheckoutForm
+      charge="/api/pay" // see /docs/react#your-api-routes
+      orderId={order.id}
+      amount={order.total} // display only: the server calculates the real total
+      currency="USD"
+      itemCount={order.items}
+      locale="so"
+      onResult={(result) => {
+        if (result.instructions) {
+          // Manual mode: show <ManualPayCard instructions={result.instructions} />
+        }
+      }}
+    />
+  );
+}
+```
+
+The form calls [`usePayment()`](/docs/react#usepayment) for you, so double taps and resends after
+a dropped connection never charge twice.
+
+- The wallet is **detected** from the phone prefix, but the customer's own pick always wins
+  (numbers move between operators).
+- `mode="auto"` changes the button to "Pay $18.00 with EVC Plus" for PIN-prompt providers.
+- On mobile the Pay button sticks to the bottom of the screen.
+
+## Props
+
+| Prop            | Type                                | Default    |                                                 |
+| --------------- | ----------------------------------- | ---------- | ----------------------------------------------- |
+| `charge`        | `string \| ChargeFn`                | —          | Your charge route or function.                  |
+| `amount`        | `number`                            | —          | Shown to the customer only.                     |
+| `currency`      | `'USD' \| 'SLSH'`                   | —          |                                                 |
+| `orderId`       | `string`                            | —          | Sent to your server to look up the total.       |
+| `itemCount`     | `number`                            | —          | Shows an "N items" line.                        |
+| `mode`          | `'manual' \| 'auto'`                | `'manual'` | Changes the button label.                       |
+| `wallets`       | `MobileWallet[]`                    | all four   | Wallets to offer, in order.                     |
+| `locale`        | `'so' \| 'en' \| 'ar'`              | `'so'`     | Arabic switches to right-to-left.               |
+| `askName`       | `boolean`                           | `true`     | Ask for the customer's name.                    |
+| `defaultValues` | `{ name?: string; phone?: string }` | —          | Prefill, e.g. for a signed-in customer.         |
+| `onResult`      | `(result) => void`                  | —          | Called once the server has started the payment. |
+| `className`     | `string`                            | —          |                                                 |

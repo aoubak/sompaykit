@@ -1,0 +1,40 @@
+@import 'tailwindcss';
+@import 'fumadocs-ui/css/neutral.css';
+@import 'fumadocs-ui/css/preset.css';
+/* The SomPayKit theme, the same file the registry ships. */
+@import '../../../registry/src/styles/sompaykit.css';
+
+/* Live previews render the registry components, so Tailwind must see their classes. */
+@source '../../../registry/src';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* @fontsource-variable/geist names the family 'Geist Variable'. */
+@theme inline {
+  --font-sans: 'Geist Variable', 'Geist', 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Fumadocs' own colors, from the SomPayKit tokens (light and dark follow automatically). */
+:root,
+.dark {
+  --color-fd-background: var(--background);
+  --color-fd-foreground: var(--foreground);
+  --color-fd-card: var(--card);
+  --color-fd-card-foreground: var(--card-foreground);
+  --color-fd-popover: var(--popover);
+  --color-fd-popover-foreground: var(--popover-foreground);
+  --color-fd-primary: var(--primary);
+  --color-fd-primary-foreground: var(--primary-foreground);
+  --color-fd-secondary: var(--secondary);
+  --color-fd-secondary-foreground: var(--secondary-foreground);
+  --color-fd-muted: var(--muted);
+  --color-fd-muted-foreground: var(--muted-foreground);
+  --color-fd-accent: var(--primary-muted);
+  --color-fd-accent-foreground: var(--primary-muted-foreground);
+  --color-fd-border: var(--border);
+  --color-fd-ring: var(--ring);
+}
+
+body {
+  font-family: var(--font-sans);
+}
