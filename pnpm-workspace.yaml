@@ -6,3 +6,7 @@ packages:
 # pnpm 10 does not run dependency install scripts unless they are listed here.
 onlyBuiltDependencies:
   - 'esbuild'
+
+# Next pins an old postcss with known advisories; use the patched one the apps already depend on.
+overrides:
+  'next>postcss': '8.5.30'
