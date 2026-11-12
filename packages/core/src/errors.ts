@@ -92,6 +92,16 @@ export const ERROR_MESSAGES: Readonly<Record<ErrorCode, Readonly<Record<Locale, 
     en: 'This payment provider is not available yet.',
     ar: 'مزود الدفع هذا غير متاح بعد.',
   },
+  METHOD_NOT_SUPPORTED: {
+    so: 'Habkan lacag bixinta lagama heli karo adeeggan.',
+    en: 'This payment method is not available with this provider.',
+    ar: 'طريقة الدفع هذه غير متاحة مع هذا المزود.',
+  },
+  AMOUNT_MISMATCH: {
+    so: 'Lacagta la bixiyay lama mid aha qiimaha dalabka.',
+    en: 'The amount paid does not match the order.',
+    ar: 'المبلغ المدفوع لا يطابق قيمة الطلب.',
+  },
   CONFIG_ERROR: {
     so: 'Habaynta lacag bixinta ma dhammaystirna. Fadlan la xiriir dukaanka.',
     en: 'Payment setup is incomplete. Please contact the store.',

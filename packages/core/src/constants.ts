@@ -33,11 +33,36 @@ export const USSD_PATTERNS: Readonly<Partial<Record<MobileWallet, string>>> = {
 // ISO 4217 code; confirm what WaafiPay and SifaloPay expect.
 export const SUPPORTED_CURRENCIES: readonly Currency[] = ['USD', 'SLSH'];
 
-// TODO(VERIFY): wallets each automatic provider supports (per community reports).
+// TODO(VERIFY): wallets WaafiPay supports (per community reports). The SifaloPay list is what
+// its payment page offers (it also takes Premier wallet, which has no `Wallet` value yet).
 export const PROVIDER_WALLETS: Readonly<Record<'waafipay' | 'sifalopay', readonly Wallet[]>> = {
   waafipay: ['evc', 'zaad', 'sahal', 'card'],
-  sifalopay: ['evc', 'zaad', 'edahab'],
+  sifalopay: ['evc', 'zaad', 'sahal', 'edahab', 'card'],
 };
+
+/**
+ * SifaloPay payment page (hosted checkout). Staging values are proven end to end
+ * (pay → return → verify). Docs: https://developer.sifalopay.com/docs/hosted-checkout
+ */
+export const SIFALOPAY = {
+  // TODO(VERIFY): the live hosts are from SifaloPay's docs; no live payment tested yet.
+  gateway: {
+    staging: 'https://spay-api.sifalo.net/gateway/',
+    live: 'https://api.sifalopay.com/gateway/',
+  },
+  checkout: {
+    staging: 'https://pay.sifalo.net/checkout/',
+    live: 'https://pay.sifalo.com/checkout/',
+  },
+  /** Appended to the gateway URL. Takes no auth. */
+  verifyPath: 'verify.php',
+  /** Paid only when `status` is "success" AND `code` is `paid`. */
+  codes: { failed: '600', paid: '601', pending: '603', insufficientFunds: '604' },
+  /** The payment page only takes USD. */
+  currency: 'USD',
+  /** SifaloPay asks merchants to allow up to 120 s per gateway call. */
+  timeoutMs: 120_000,
+} as const;
 
 // TODO(VERIFY): WaafiPay API details, against docs.waafipay.com and sandbox testing.
 export const WAAFIPAY = {

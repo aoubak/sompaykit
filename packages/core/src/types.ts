@@ -44,7 +44,10 @@ export type ErrorCode =
   | 'DUPLICATE_REFERENCE'
   | 'NOT_FOUND'
   | 'NOT_IMPLEMENTED'
-  | 'CONFIG_ERROR';
+  | 'METHOD_NOT_SUPPORTED'
+  | 'CONFIG_ERROR'
+  // Payment page: the gateway says "paid" but for a different amount than the order
+  | 'AMOUNT_MISMATCH';
 
 /** What the customer needs to pay by hand in manual mode. */
 export interface ManualInstructions {
@@ -85,8 +88,64 @@ export interface CreatePaymentResult {
   raw?: unknown;
 }
 
+/** Manual and PIN-prompt providers: the customer pays from a phone number. */
 export interface PaymentProvider {
   readonly id: ProviderId;
   createPayment(input: CreatePaymentInput): Promise<CreatePaymentResult>;
   checkStatus(referenceId: string): Promise<PaymentStatus>;
+}
+
+/** Input for a payment page (hosted checkout). No phone number: the buyer picks on the page. */
+export interface CheckoutInput {
+  /** Your order ID. Added to `returnUrl` as `order_id` so you know which order came back. */
+  orderId: string;
+  /** Server-calculated. Never pass a total sent by the browser. */
+  amount: number;
+  currency: Currency;
+  /** Where the buyer lands after paying. The gateway adds the payment's `sid` to it. */
+  returnUrl: string;
+  /** Server URL the gateway calls after payment. Its body is not signed: always call `verify`. */
+  webhookUrl: string;
+}
+
+export interface CheckoutResult {
+  /** Send the buyer here to pay. */
+  redirectUrl: string;
+  /** Raw gateway response. Never shown to customers. */
+  raw?: unknown;
+}
+
+/** Give `sid` (from the return URL or webhook). `orderId` is the fallback when there is no sid. */
+export interface VerifyInput {
+  sid?: string;
+  orderId?: string;
+  /**
+   * The order's amount from your database. Pass it every time: a payment for a different
+   * amount then comes back as `failed` with `AMOUNT_MISMATCH`.
+   */
+  amount?: number;
+}
+
+export interface VerifyResult {
+  /** `paid` only when the gateway confirms it and every check passes. */
+  status: Extract<PaymentStatus, 'paid' | 'pending' | 'failed'>;
+  /** The gateway's payment ID. Store it with a unique constraint so it can't unlock two orders. */
+  sid: string | null;
+  amount: number | null;
+  currency: string | null;
+  /** How the buyer paid, as the gateway names it (wallet or card). */
+  paymentType: string | null;
+  /** Set when status is `failed`. Turn it into text with `message(code, locale)`. */
+  errorCode?: ErrorCode;
+  /** The gateway's own text, for logs. Never shown to customers. */
+  detail?: string;
+  /** Raw gateway response, for disputes. Never shown to customers. */
+  raw?: unknown;
+}
+
+/** Payment-page providers: send the buyer to `redirectUrl`, then confirm with `verifyPayment`. */
+export interface HostedCheckoutProvider {
+  readonly id: ProviderId;
+  createCheckout(input: CheckoutInput): Promise<CheckoutResult>;
+  verifyPayment(input: VerifyInput): Promise<VerifyResult>;
 }

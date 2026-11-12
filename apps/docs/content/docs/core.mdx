@@ -27,10 +27,15 @@ const sompay = createSomPay({
 });
 ```
 
-| Provider   | Mode                                       | Status                              |
-| ---------- | ------------------------------------------ | ----------------------------------- |
-| `manual`   | Customer sends money, types transaction ID | Ready                               |
-| `waafipay` | PIN prompt on the customer's phone         | Coming (waiting for sandbox access) |
+| Provider    | Mode                                       | Status                              |
+| ----------- | ------------------------------------------ | ----------------------------------- |
+| `manual`    | Customer sends money, types transaction ID | Ready                               |
+| `waafipay`  | PIN prompt on the customer's phone         | Coming (waiting for sandbox access) |
+| `sifalopay` | Payment page: customer pays on SifaloPay   | Ready on staging                    |
+
+`manual` and `waafipay` use [`charge`](#charge) and [`status`](#status). `sifalopay` uses
+[`checkout` and `verify`](#checkout-and-verify). Calling the other pair throws
+`METHOD_NOT_SUPPORTED`.
 
 ## charge
 
@@ -103,6 +108,48 @@ const status = await sompay.status('spk_7f3a…'); // PaymentStatus
 
 In manual mode your database is the source of truth: you set `awaiting_confirmation` when the
 customer sends a transaction ID and `paid` when you confirm it.
+
+## checkout and verify
+
+The payment page: the buyer pays on SifaloPay's page (EVC, ZAAD, Sahal, eDahab, Premier or card)
+and comes back to your site. USD only.
+
+```ts
+const sompay = createSomPay({
+  provider: 'sifalopay',
+  apiUser: process.env.SIFALO_API_USER!,
+  apiKey: process.env.SIFALO_API_KEY!,
+  env: 'staging', // 'staging' | 'live'
+});
+
+const { redirectUrl } = await sompay.checkout({
+  orderId: 'order_123', // added to returnUrl as order_id
+  amount: 3, // from your database
+  currency: 'USD',
+  returnUrl: 'https://shop.example/checkout/return',
+  webhookUrl: 'https://shop.example/api/sifalo-webhook',
+});
+// Send the buyer to redirectUrl.
+```
+
+The buyer comes back to `returnUrl` with `order_id` and `sid` in the query. Confirm on your
+server, there and in the webhook:
+
+```ts
+const result = await sompay.verify({ sid, amount: order.total });
+// result.status: 'paid' | 'pending' | 'failed'   (failed has an errorCode)
+```
+
+<Callout type="error" title="Only verify can be trusted">
+  The return URL and the webhook body are not signed. Mark an order paid only when `verify` returns
+  `paid`. Always pass the order's `amount` from your database, and store each `sid` with a unique
+  constraint so one payment can't unlock two orders.
+</Callout>
+
+If `verify` throws (`TIMEOUT`, `NETWORK_ERROR`, `PROVIDER_ERROR`), the state of the payment is
+unknown. Keep the order pending and try again. Gateway calls can take up to 120 seconds.
+
+The sandbox only approves SifaloPay's test wallets (eDahab `621111111`). Other numbers fail.
 
 ## Phone numbers and wallets
 
@@ -178,4 +225,6 @@ try {
 | `DUPLICATE_REFERENCE`  | Same `referenceId`, different payment                 |
 | `NOT_FOUND`            | Unknown `referenceId`                                 |
 | `NOT_IMPLEMENTED`      | Provider not available yet                            |
+| `METHOD_NOT_SUPPORTED` | `charge` on a payment page, or `checkout` without one |
+| `AMOUNT_MISMATCH`      | Payment page: paid, but not the order's amount        |
 | `CONFIG_ERROR`         | Missing keys or bad options                           |

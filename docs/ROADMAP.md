@@ -27,7 +27,7 @@
 
 - [ ] Pro blocks from approved mockups: full checkout flow, merchant orders dashboard, payment settings, Arabic RTL
 - [ ] Starter app (Next.js + Supabase) using core + blocks
-- [ ] SifaloPay provider
+- [x] SifaloPay provider — payment page (hosted checkout) in `packages/core`, free/MIT; tested on staging, live hosts still **VERIFY**
 - [ ] Whop listings: Starter $29, Pro $79, Agency $199; private repo access
 - [ ] Product page on aoubak.com
 - [ ] Offer done-for-you setups
