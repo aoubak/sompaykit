@@ -1,6 +1,6 @@
 {
   "name": "@sompaykit/react",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "React hooks for SomPayKit: start a Somali mobile-money payment and follow its status.",
   "license": "MIT",
   "author": "Aoub (https://aoubak.com)",

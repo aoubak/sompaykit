@@ -1,6 +1,6 @@
 {
   "name": "@sompaykit/registry",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "Source of the free SomPayKit shadcn registry items (built to apps/docs/public/r).",
   "license": "MIT",

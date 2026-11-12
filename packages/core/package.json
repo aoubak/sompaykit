@@ -1,6 +1,6 @@
 {
   "name": "@sompaykit/core",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Accept EVC Plus, Zaad, Sahal and eDahab in any TypeScript app. Zero dependencies, fetch only.",
   "license": "MIT",
   "author": "Aoub (https://aoubak.com)",
