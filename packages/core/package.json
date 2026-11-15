@@ -4,6 +4,15 @@
   "description": "Accept EVC Plus, Zaad, Sahal and eDahab in any TypeScript app. Zero dependencies, fetch only.",
   "license": "MIT",
   "author": "Aoub (https://aoubak.com)",
+  "homepage": "https://github.com/aoubak/sompaykit#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aoubak/sompaykit.git",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/aoubak/sompaykit/issues"
+  },
   "keywords": [
     "somalia",
     "payments",

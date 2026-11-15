@@ -4,6 +4,15 @@
   "description": "React hooks for SomPayKit: start a Somali mobile-money payment and follow its status.",
   "license": "MIT",
   "author": "Aoub (https://aoubak.com)",
+  "homepage": "https://github.com/aoubak/sompaykit#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aoubak/sompaykit.git",
+    "directory": "packages/react"
+  },
+  "bugs": {
+    "url": "https://github.com/aoubak/sompaykit/issues"
+  },
   "keywords": [
     "somalia",
     "payments",
