@@ -1,0 +1,1 @@
+SomPayKit: Somali mobile-money checkout for your app. EVC Plus, Zaad, Sahal and eDahab.
