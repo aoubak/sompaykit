@@ -7,10 +7,16 @@ npx shadcn@latest add https://sompaykit.aoubak.com/r/checkout-form.json
 npx shadcn@latest add https://sompaykit.aoubak.com/r/manual-pay-card.json
 npx shadcn@latest add https://sompaykit.aoubak.com/r/payment-status.json
 npx shadcn@latest add https://sompaykit.aoubak.com/r/wallet-picker.json
+
+# Optional: the SomPayKit look (brand purple, page colors, radius), light + dark
+npx shadcn@latest add https://sompaykit.aoubak.com/r/sompaykit-theme.json
 ```
 
-Each component also installs `sompaykit-base`: the theme tokens (merged into your global CSS),
-so/en/ar strings in `lib/sompaykit-i18n.ts`, formatters and inline icons.
+Each component also installs `sompaykit-base`: so/en/ar strings in `lib/sompaykit-i18n.ts`,
+formatters, inline icons, and the colors your project doesn't have yet (status colors, plus
+`primary-hover` / `primary-muted` worked out from your own `--primary`). It never changes colors
+your project already has: shadcn only overwrites those for a `registry:theme` item, which is what
+`sompaykit-theme` is.
 
 | Item              | Mockup          | What it does                                                                                    |
 | ----------------- | --------------- | ----------------------------------------------------------------------------------------------- |

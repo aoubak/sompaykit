@@ -7,7 +7,7 @@
       "name": "sompaykit-base",
       "type": "registry:lib",
       "title": "SomPayKit base",
-      "description": "Theme tokens (purple + paid green), so/en/ar UI strings, money and phone formatting, and inline icons. Installed automatically by every SomPayKit component.",
+      "description": "so/en/ar UI strings, money and phone formatting, inline icons, and the status colors (paid green, waiting, failed). Keeps your app's own brand colors. Installed automatically by every SomPayKit component.",
       "dependencies": ["@sompaykit/core"],
       "files": [
         {
@@ -26,6 +26,12 @@
           "target": "components/sompaykit/icons.tsx"
         }
       ]
+    },
+    {
+      "name": "sompaykit-theme",
+      "type": "registry:theme",
+      "title": "SomPayKit theme",
+      "description": "Optional. The SomPayKit look: brand purple, page and card colors, radius, light and dark mode. Replaces your project's shadcn colors."
     },
     {
       "name": "wallet-picker",
