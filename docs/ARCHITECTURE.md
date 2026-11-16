@@ -34,7 +34,7 @@ sompaykit/
 │  ├─ manual-pay-card/
 │  └─ payment-status/
 ├─ apps/
-│  ├─ docs/            sompaykit.dev — docs + serves /r/*.json registry
+│  ├─ docs/            sompaykit.aoubak.com — docs + serves /r/*.json registry
 │  └─ demo/            live demo shop
 ├─ pro/                 PRIVATE — never published to npm
 │  ├─ blocks/          full checkout flow, dashboard, settings
@@ -91,7 +91,7 @@ Unconfirmed provider facts live in `packages/core/src/constants.ts` (one place, 
   comes from `src/styles/sompaykit.css` and builds need no extra download.
 - Items: `sompaykit-base` (theme cssVars, so/en/ar strings, formatters, icons), `wallet-picker`,
   `checkout-form`, `manual-pay-card`, `payment-status`. Every component pulls in `sompaykit-base`.
-- Install: `npx shadcn@latest add https://sompaykit.dev/r/checkout-form.json`
+- Install: `npx shadcn@latest add https://sompaykit.aoubak.com/r/checkout-form.json`
 - Components depend on `@sompaykit/core` / `@sompaykit/react` (declared in each item's `dependencies`)
   and shadcn's `button` / `input` (`registryDependencies`). `src/components/ui/*` and `src/lib/utils.ts`
   are local stand-ins for typecheck and tests only; they are not published.
@@ -102,11 +102,11 @@ Unconfirmed provider facts live in `packages/core/src/constants.ts` (one place, 
 
 | What | Where | Notes |
 |---|---|---|
-| `apps/docs` (sompaykit.dev) | Cloudflare Pages, free plan | Fully static export: docs pages + registry `/r/*.json`. No server code, so it can move to any static host without changes. |
+| `apps/docs` (sompaykit.aoubak.com) | Vercel, free Hobby plan (`apps/docs/vercel.json`) | Fully static export: docs pages + registry `/r/*.json`. No server code, so it can move to any static host without changes. |
 | `apps/demo` | Cloudflare Pages + Workers, free plan | Server-side total calculation runs in a Worker / Pages Function. Manual mode only; no real gateway keys. |
 | Starter app (paid) | The buyer's own account | Not hosted by us. |
 
-- Domain `sompaykit.dev` (owner buys it). `.dev` requires HTTPS; Cloudflare provides it.
+- Domain: subdomain `sompaykit.aoubak.com` (aoubak.com DNS is on Cloudflare; the record is a DNS-only CNAME to Vercel, which issues the HTTPS certificate). A separate `sompaykit.dev` can come later.
 - Keep app code host-neutral (no platform-only APIs), so moving to Vercel Pro later is a config change.
 
 ## Release pipeline

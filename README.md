@@ -8,7 +8,7 @@ An open-core payments toolkit for Somalia: a free TypeScript SDK, free shadcn-co
 
 ## How developers use it
 
-Docs, live component previews and a demo shop: **[sompaykit.dev](https://sompaykit.dev)**.
+Docs, live component previews and the component registry: **[sompaykit.aoubak.com](https://sompaykit.aoubak.com)**.
 
 ```bash
 # Payment logic (any Node / TypeScript server)
@@ -18,7 +18,7 @@ pnpm add @sompaykit/core
 pnpm add @sompaykit/react
 
 # Checkout UI, copied into your app (shadcn/ui registry)
-npx shadcn@latest add https://sompaykit.dev/r/checkout-form.json
+npx shadcn@latest add https://sompaykit.aoubak.com/r/checkout-form.json
 ```
 
 **Manual mode works today**, with no merchant account and no API fee: the customer sends money to
@@ -79,7 +79,7 @@ Layout:
 packages/core     @sompaykit/core: types, phone, wallets, ussd, errors, providers
 packages/react    @sompaykit/react: usePayment, usePaymentStatus
 registry/         free shadcn/ui components: checkout form, wallet picker, manual pay, status
-apps/docs         sompaykit.dev: docs + the registry at /r/*.json
+apps/docs         sompaykit.aoubak.com: docs + the registry at /r/*.json
 apps/demo         demo shop (manual mode, no real money)
 docs/             product, architecture, payments, design system, roadmap, mockups
 ```
@@ -101,8 +101,9 @@ Unconfirmed provider facts (wallet prefixes, USSD codes, WaafiPay fields) all li
 
 ## Status
 
-Phase 2, the free toolkit: core SDK, React hooks, components, docs and demo are built. Next: first
-npm release (`0.1.0`), sompaykit.dev launch, then WaafiPay automatic mode. See
+Phase 2, the free toolkit: core SDK, React hooks, components, docs and demo are built, and
+`@sompaykit/core` and `@sompaykit/react` `0.1.0` are on npm. Next: docs site launch, then
+WaafiPay automatic mode. See
 [docs/ROADMAP.md](docs/ROADMAP.md).
 
 ## Contributing

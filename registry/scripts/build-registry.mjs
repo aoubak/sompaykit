@@ -2,7 +2,7 @@
 // `shadcn build` writes. Our own script so the theme comes straight from src/styles/sompaykit.css
 // (one source of truth) and so builds need no extra download.
 //
-//   node scripts/build-registry.mjs                 → https://sompaykit.dev/r/…
+//   node scripts/build-registry.mjs                 → https://sompaykit.aoubak.com/r/…
 //   REGISTRY_URL=http://localhost:3000 node …       → for a local `shadcn add` test
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
@@ -50,7 +50,7 @@ function resolveDependency(name, ownNames, registryUrl) {
   return ownNames.has(name) ? `${registryUrl}/r/${name}.json` : name;
 }
 
-export async function buildRegistry({ registryUrl = 'https://sompaykit.dev' } = {}) {
+export async function buildRegistry({ registryUrl = 'https://sompaykit.aoubak.com' } = {}) {
   const registry = JSON.parse(await readFile(join(ROOT, 'registry.json'), 'utf8'));
   const ownNames = new Set(registry.items.map((item) => item.name));
   const theme = themeFromCss(await readThemeCss());
@@ -78,7 +78,7 @@ export async function buildRegistry({ registryUrl = 'https://sompaykit.dev' } = 
 }
 
 async function main() {
-  const registryUrl = (process.env.REGISTRY_URL ?? 'https://sompaykit.dev').replace(/\/$/, '');
+  const registryUrl = (process.env.REGISTRY_URL ?? 'https://sompaykit.aoubak.com').replace(/\/$/, '');
   const out = join(ROOT, 'dist', 'r');
   const { index, items } = await buildRegistry({ registryUrl });
   await rm(out, { recursive: true, force: true });

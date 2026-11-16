@@ -3,7 +3,7 @@
 ## Phase 0 — Setup & verify (week 1)
 
 - [x] Monorepo: pnpm + Turborepo, strict TS, ESLint, Prettier, Vitest, Changesets
-- [ ] Reserve npm scope `@sompaykit` and domain `sompaykit.dev`
+- [x] Reserve npm scope `@sompaykit` and a domain — npm scope done; docs use the subdomain sompaykit.aoubak.com (`sompaykit.dev` optional later)
 - [ ] WaafiPay + SifaloPay sandbox access; confirm merchant requirements and fees
 - [ ] **VERIFY** wallet prefixes and USSD codes (all collected in `packages/core/src/constants.ts`)
 
@@ -13,13 +13,13 @@
 - [x] `phone.ts`, `wallets.ts`, `ussd.ts`, `errors.ts` (so/en/ar) — fully unit tested
 - [x] Manual provider
 - [ ] WaafiPay provider (sandbox-tested) — stub with interface + TODO; waiting for sandbox keys
-- [ ] Publish `@sompaykit/core@0.1.0` to npm
+- [x] Publish `@sompaykit/core@0.1.0` to npm
 
 ## Phase 2 — React + free registry + docs (weeks 3–5)
 
 - [x] `@sompaykit/react`: `usePayment`, `usePaymentStatus`
 - [x] Registry: `checkout-form`, `wallet-picker`, `manual-pay-card`, `payment-status` — built to `registry/dist/r`; real `shadcn add` test pending the docs host
-- [ ] Docs site on sompaykit.dev (Fumadocs or Nextra) serving `/r/*.json` — static export, hosted on Cloudflare Pages (free)
+- [ ] Docs site on sompaykit.aoubak.com (Fumadocs) serving `/r/*.json` — static export, hosted on Vercel (free Hobby plan)
 - [ ] Demo shop + 30-second demo video — shop built and tested in `apps/demo` (manual mode, payments confirm themselves); video and first Cloudflare deploy pending
 - [ ] Public launch: npm, GitHub, Somali dev communities
 
