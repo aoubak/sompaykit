@@ -19,7 +19,7 @@
 
 - [x] `@sompaykit/react`: `usePayment`, `usePaymentStatus`
 - [x] Registry: `checkout-form`, `wallet-picker`, `manual-pay-card`, `payment-status` — built to `registry/dist/r`; real `shadcn add` test pending the docs host
-- [ ] Docs site on sompaykit.aoubak.com (Fumadocs) serving `/r/*.json` — static export, hosted on Vercel (free Hobby plan)
+- [x] Docs site on sompaykit.aoubak.com (Fumadocs) serving `/r/*.json` — static export, hosted on Vercel (free Hobby plan)
 - [ ] Demo shop + 30-second demo video — shop built and tested in `apps/demo` (manual mode, payments confirm themselves); video and first Cloudflare deploy pending
 - [ ] Public launch: npm, GitHub, Somali dev communities
 
