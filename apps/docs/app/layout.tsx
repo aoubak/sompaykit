@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/next';
 import { RootProvider } from 'fumadocs-ui/provider';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
@@ -22,6 +23,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className="flex min-h-screen flex-col">
         {/* Static export: search reads a prebuilt index from /api/search. */}
         <RootProvider search={{ options: { type: 'static' } }}>{children}</RootProvider>
+        {/* Vercel Web Analytics: cookie-free page views. Needs Analytics enabled on the Vercel project. */}
+        <Analytics />
       </body>
     </html>
   );
