@@ -36,13 +36,19 @@ function useIsClient(): boolean {
   );
 }
 
-export function ComponentPreview({ name }: { name: keyof typeof DEMOS }) {
+export function ComponentPreview({
+  name,
+  className,
+}: {
+  name: keyof typeof DEMOS;
+  className?: string;
+}) {
   const [locale, setLocale] = useState<Locale>('so');
   const isClient = useIsClient();
   const Demo = DEMOS[name];
 
   return (
-    <div className="not-prose my-6 overflow-hidden rounded-xl border bg-card">
+    <div className={cn('not-prose my-6 overflow-hidden rounded-xl border bg-card', className)}>
       <div className="flex flex-wrap items-center justify-between gap-2 border-b px-3 py-2">
         <span className="text-sm font-medium text-muted-foreground">Live preview</span>
         <div role="group" aria-label="Language" className="flex rounded-lg bg-muted p-0.5">
