@@ -89,7 +89,9 @@ Unconfirmed provider facts live in `packages/core/src/constants.ts` (one place, 
 - `pnpm --filter @sompaykit/registry build` writes `registry/dist/r/*.json` in the `shadcn build`
   format; the docs app copies it to `public/r/`. Own script instead of `shadcn build`, so the theme
   comes from `src/styles/sompaykit.css` and builds need no extra download.
-- Items: `sompaykit-base` (theme cssVars, so/en/ar strings, formatters, icons), `wallet-picker`,
+- Items: `sompaykit-base` (`registry:lib`: status colors + brand shades derived from the project's
+  `--primary`, so/en/ar strings, formatters, icons), `sompaykit-theme` (`registry:theme`, optional:
+  the full token set, which shadcn applies over the project's colors), `wallet-picker`,
   `checkout-form`, `manual-pay-card`, `payment-status`. Every component pulls in `sompaykit-base`.
 - Install: `npx shadcn@latest add https://sompaykit.aoubak.com/r/checkout-form.json`
 - Components depend on `@sompaykit/core` / `@sompaykit/react` (declared in each item's `dependencies`)

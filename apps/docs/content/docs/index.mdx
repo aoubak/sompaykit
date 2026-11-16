@@ -40,7 +40,16 @@ npx shadcn@latest add https://sompaykit.aoubak.com/r/checkout-form.json
 ```
 
 This copies `components/sompaykit/checkout-form.tsx` and `wallet-picker.tsx` into your app, adds
-the SomPayKit colors to your global CSS, and installs `@sompaykit/core` and `@sompaykit/react`.
+the status colors (paid, waiting, failed) to your global CSS, and installs `@sompaykit/core` and
+`@sompaykit/react`. The form uses **your** brand color (`--primary`), so it matches the rest of your
+app.
+
+Want the purple SomPayKit look from these docs instead? Add the theme too. It replaces your
+project's shadcn colors in light and dark mode:
+
+```npm
+npx shadcn@latest add https://sompaykit.aoubak.com/r/sompaykit-theme.json
+```
 
 </Step>
 <Step>

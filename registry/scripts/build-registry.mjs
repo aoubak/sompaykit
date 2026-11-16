@@ -10,7 +10,48 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const ITEM_SCHEMA = 'https://ui.shadcn.com/schema/registry-item.json';
-const THEME_ITEM = 'sompaykit-base';
+const BASE_ITEM = 'sompaykit-base';
+const THEME_ITEM = 'sompaykit-theme';
+
+/** Colors every shadcn project already defines. `sompaykit-base` never touches them. */
+export const SHADCN_COLOR_VARS = new Set([
+  'radius',
+  'background',
+  'foreground',
+  'card',
+  'card-foreground',
+  'popover',
+  'popover-foreground',
+  'primary',
+  'primary-foreground',
+  'secondary',
+  'secondary-foreground',
+  'muted',
+  'muted-foreground',
+  'accent',
+  'accent-foreground',
+  'destructive',
+  'border',
+  'input',
+  'ring',
+]);
+
+/**
+ * Brand shades in `sompaykit-base`, worked out from the project's own `--primary`, so components
+ * match any shadcn theme. `sompaykit-theme` replaces them with the exact SomPayKit purples.
+ */
+export const PRIMARY_SHADES = {
+  light: {
+    'primary-hover': 'color-mix(in oklab, var(--primary) 82%, black)',
+    'primary-muted': 'color-mix(in oklab, var(--primary) 12%, var(--background))',
+    'primary-muted-foreground': 'color-mix(in oklab, var(--primary) 75%, var(--foreground))',
+  },
+  dark: {
+    'primary-hover': 'color-mix(in oklab, var(--primary) 82%, white)',
+    'primary-muted': 'color-mix(in oklab, var(--primary) 25%, var(--background))',
+    'primary-muted-foreground': 'color-mix(in oklab, var(--primary) 45%, var(--foreground))',
+  },
+};
 
 /** Reads `--name: value;` pairs from one top-level CSS block, e.g. `:root { … }`. */
 export function readCssVars(css, selector) {
@@ -29,19 +70,35 @@ export function readThemeCss() {
   return readFile(join(ROOT, 'src/styles/sompaykit.css'), 'utf8');
 }
 
-/** shadcn `cssVars` + `css` for the theme item, from our CSS file. */
+/** Drops the colors every shadcn project already has, and swaps in the derived brand shades. */
+function onlyOwnVars(vars, shades) {
+  const own = Object.fromEntries(Object.entries(vars).filter(([k]) => !SHADCN_COLOR_VARS.has(k)));
+  return { ...own, ...shades };
+}
+
+/**
+ * shadcn `cssVars` + `css`, from our CSS file.
+ * - `base`: what every component needs, without changing the project's own colors. shadcn only
+ *   adds variables a project is missing, because the item is a `registry:lib`.
+ * - `theme`: the full SomPayKit look. A `registry:theme`, so shadcn replaces existing colors.
+ */
 export function themeFromCss(css) {
   const theme = readCssVars(css, '@theme inline');
+  const light = readCssVars(css, ':root');
+  const dark = readCssVars(css, '.dark');
+  // Only the Arabic font: projects load Geist their own way (e.g. next/font).
+  const fonts = { 'font-arabic': theme['font-arabic'] };
+  const arabic = { '@layer base': { ':lang(ar)': { 'font-family': 'var(--font-arabic)' } } };
   return {
-    cssVars: {
-      // Only the Arabic font: projects load Geist their own way (e.g. next/font).
-      theme: { 'font-arabic': theme['font-arabic'] },
-      light: readCssVars(css, ':root'),
-      dark: readCssVars(css, '.dark'),
+    base: {
+      cssVars: {
+        theme: fonts,
+        light: onlyOwnVars(light, PRIMARY_SHADES.light),
+        dark: onlyOwnVars(dark, PRIMARY_SHADES.dark),
+      },
+      css: arabic,
     },
-    css: {
-      '@layer base': { ':lang(ar)': { 'font-family': 'var(--font-arabic)' } },
-    },
+    theme: { cssVars: { theme: fonts, light, dark }, css: arabic },
   };
 }
 
@@ -53,12 +110,12 @@ function resolveDependency(name, ownNames, registryUrl) {
 export async function buildRegistry({ registryUrl = 'https://sompaykit.aoubak.com' } = {}) {
   const registry = JSON.parse(await readFile(join(ROOT, 'registry.json'), 'utf8'));
   const ownNames = new Set(registry.items.map((item) => item.name));
-  const theme = themeFromCss(await readThemeCss());
+  const css = themeFromCss(await readThemeCss());
 
   const items = [];
   for (const item of registry.items) {
     const files = [];
-    for (const file of item.files) {
+    for (const file of item.files ?? []) {
       const content = (await readFile(join(ROOT, file.path), 'utf8')).replace(/\r\n/g, '\n');
       files.push({ ...file, content });
     }
@@ -71,7 +128,8 @@ export async function buildRegistry({ registryUrl = 'https://sompaykit.aoubak.co
         ),
       }),
       files,
-      ...(item.name === THEME_ITEM && theme),
+      ...(item.name === BASE_ITEM && css.base),
+      ...(item.name === THEME_ITEM && css.theme),
     });
   }
   return { index: { ...registry, items: registry.items }, items };
