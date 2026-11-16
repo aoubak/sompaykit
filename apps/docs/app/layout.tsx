@@ -10,7 +10,7 @@ import '@fontsource/ibm-plex-sans-arabic/arabic-700.css';
 import './global.css';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://sompaykit.dev'),
+  metadataBase: new URL('https://sompaykit.aoubak.com'),
   title: { default: 'SomPayKit', template: '%s · SomPayKit' },
   description:
     'Accept EVC Plus, Zaad, Sahal and eDahab in your app. TypeScript SDK, React hooks and shadcn/ui components.',

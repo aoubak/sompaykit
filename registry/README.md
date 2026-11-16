@@ -3,10 +3,10 @@
 shadcn/ui registry for SomPayKit's free components. MIT.
 
 ```bash
-npx shadcn@latest add https://sompaykit.dev/r/checkout-form.json
-npx shadcn@latest add https://sompaykit.dev/r/manual-pay-card.json
-npx shadcn@latest add https://sompaykit.dev/r/payment-status.json
-npx shadcn@latest add https://sompaykit.dev/r/wallet-picker.json
+npx shadcn@latest add https://sompaykit.aoubak.com/r/checkout-form.json
+npx shadcn@latest add https://sompaykit.aoubak.com/r/manual-pay-card.json
+npx shadcn@latest add https://sompaykit.aoubak.com/r/payment-status.json
+npx shadcn@latest add https://sompaykit.aoubak.com/r/wallet-picker.json
 ```
 
 Each component also installs `sompaykit-base`: the theme tokens (merged into your global CSS),

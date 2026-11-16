@@ -2,7 +2,7 @@
   "name": "@sompaykit/docs",
   "version": "0.0.1",
   "private": true,
-  "description": "sompaykit.dev: docs and the free shadcn registry (/r/*.json). Static export for Cloudflare Pages.",
+  "description": "sompaykit.aoubak.com: docs and the free shadcn registry (/r/*.json). Static export, hosted on Vercel.",
   "type": "module",
   "scripts": {
     "dev": "node scripts/copy-registry.mjs && next dev",

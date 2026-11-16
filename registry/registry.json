@@ -1,7 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
   "name": "sompaykit",
-  "homepage": "https://sompaykit.dev",
+  "homepage": "https://sompaykit.aoubak.com",
   "items": [
     {
       "name": "sompaykit-base",

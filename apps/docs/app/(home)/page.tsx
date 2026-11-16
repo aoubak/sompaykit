@@ -58,7 +58,7 @@ export default function HomePage() {
             </Link>
           </div>
           <pre className="overflow-x-auto rounded-xl border bg-card px-4 py-3 text-sm">
-            <code>npx shadcn@latest add https://sompaykit.dev/r/checkout-form.json</code>
+            <code>npx shadcn@latest add https://sompaykit.aoubak.com/r/checkout-form.json</code>
           </pre>
         </div>
         <ComponentPreview name="checkout-form" />

@@ -4,7 +4,7 @@ const withMDX = createMDX();
 
 /** @type {import('next').NextConfig} */
 const config = {
-  // Static files only (out/), served by Cloudflare Pages. No server, no functions.
+  // Static files only (out/), served by Vercel as plain files. No server, no functions.
   output: 'export',
   reactStrictMode: true,
   // The repo's root ESLint config covers this app (pnpm lint).
