@@ -1,4 +1,9 @@
-# SomPayKit
+<h1>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="apps/docs/public/brand/wordmark-dark.svg" />
+    <img src="apps/docs/public/brand/wordmark-light.svg" alt="SomPayKit" height="48" />
+  </picture>
+</h1>
 
 Accept **EVC Plus, Zaad, Sahal and eDahab** in your app in minutes.
 
