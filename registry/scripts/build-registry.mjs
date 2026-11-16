@@ -78,7 +78,10 @@ export async function buildRegistry({ registryUrl = 'https://sompaykit.aoubak.co
 }
 
 async function main() {
-  const registryUrl = (process.env.REGISTRY_URL ?? 'https://sompaykit.aoubak.com').replace(/\/$/, '');
+  const registryUrl = (process.env.REGISTRY_URL ?? 'https://sompaykit.aoubak.com').replace(
+    /\/$/,
+    '',
+  );
   const out = join(ROOT, 'dist', 'r');
   const { index, items } = await buildRegistry({ registryUrl });
   await rm(out, { recursive: true, force: true });
